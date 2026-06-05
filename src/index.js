@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./db');
-const { findOptimalRoute, haversine } = require('./dijkstra');
+const { findOptimalRoute, findAlternativeRoutes, haversine } = require('./dijkstra');
 
 require('dotenv').config();
 
@@ -156,7 +156,7 @@ app.get('/api/route', async (req, res) => {
   }
 
   try {
-    const routeResult = await findOptimalRoute(
+    const routeResult = await findAlternativeRoutes(
       fromLat, fromLon,
       toLat, toLon,
       mode,
@@ -165,11 +165,11 @@ app.get('/api/route', async (req, res) => {
       transferPenalty
     );
 
-    if (!routeResult) {
+    if (!routeResult || routeResult.length === 0) {
       return res.status(404).json({ error: 'No route found between the specified locations.' });
     }
 
-    res.json(routeResult);
+    res.json({ routes: routeResult });
   } catch (err) {
     console.error('Error running Dijkstra router:', err);
     res.status(500).json({ error: 'Internal router error calculating route' });
