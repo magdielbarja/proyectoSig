@@ -5,9 +5,13 @@ require('dotenv').config();
 // Prefers DATABASE_URL if available (as in Supabase, Neon, Render)
 const isProduction = process.env.NODE_ENV === 'production';
 
+const hasExternalDb = process.env.DATABASE_URL && 
+                       !process.env.DATABASE_URL.includes('localhost') && 
+                       !process.env.DATABASE_URL.includes('127.0.0.1');
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/sig_microbuses',
-  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
+  ssl: hasExternalDb ? { rejectUnauthorized: false } : false
 });
 
 pool.on('connect', () => {

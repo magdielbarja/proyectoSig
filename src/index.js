@@ -114,32 +114,24 @@ app.get('/api/lines/near', async (req, res) => {
   }
 
   try {
-    // 1. Fetch all points
-    const pointsRes = await db.query('SELECT * FROM puntos');
-    
-    // 2. Filter points by distance
-    const nearbyPointIds = [];
-    for (const pt of pointsRes.rows) {
-      const dist = haversine(lat, lon, pt.latitud, pt.longitud);
-      if (dist <= radiusKm) {
-        nearbyPointIds.push(pt.id_point);
-      }
-    }
-
-    if (nearbyPointIds.length === 0) {
-      return res.json([]);
-    }
-
-    // 3. Query distinct lines passing through these points
+    // Query distinct lines passing through points within the specified radius
+    // We calculate the Haversine distance directly in SQL to make it fast and avoid pg array parsing errors.
     const query = `
       SELECT DISTINCT l.id_linea, l.nombre_linea, l.color_linea, l.imagen_microbus
       FROM lineas_puntos lp
       JOIN linea_ruta lr ON lp.id_linea_ruta = lr.id_linea_ruta
       JOIN lineas l ON lr.id_linea = l.id_linea
-      WHERE lp.id_punto = ANY($1) OR lp.id_punto_dest = ANY($1)
+      JOIN puntos p ON (lp.id_punto = p.id_point OR lp.id_punto_dest = p.id_point)
+      WHERE (
+        6371.0 * 2.0 * ASIN(SQRT(
+          POWER(SIN((p.latitud - $1) * pi() / 360.0), 2) +
+          COS($1 * pi() / 180.0) * COS(p.latitud * pi() / 180.0) *
+          POWER(SIN((p.longitud - $2) * pi() / 360.0), 2)
+        )) <= $3
+      )
       ORDER BY l.nombre_linea ASC
     `;
-    const linesRes = await db.query(query, [nearbyPointIds]);
+    const linesRes = await db.query(query, [lat, lon, radiusKm]);
     res.json(linesRes.rows);
   } catch (err) {
     console.error('Error finding near lines:', err);
