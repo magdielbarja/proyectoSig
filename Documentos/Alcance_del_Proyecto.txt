@@ -1,0 +1,36 @@
+Alcance mínimo del proyecto Microbuses
+Alcance
+El proyecto consiste en el desarrollo de aplicaciones móviles integrados que sirva como apoyo a los usuarios de los microbuses en la ciudad de Santa Cruz de la Sierra.
+El proyecto permitirá a los usuarios de los microbuses conocer las rutas o recorridos de los microbuses, así como también, el usuario podrá saber que microbuses pasan por un punto dado de la ciudad y cuál es la ruta de cada línea de microbús. También el usuario puede encontrar las rutas para ir de una parada a otra en la ciudad y determinar cual es la mas optima en termino de tiempo o distancia
+El siguiente proyecto incluye el desarrollo de aplicaciones para Smartphones con sistema operativo iOS y/o Android, las mismas que van a guardar y leer la información geográfica en una Base de Datos Centralizada, tal como se muestra en la siguiente ilustración.
+
+
+
+Aplicaciones a desarrollar
+Las aplicaciones móviles a desarrollar son las siguientes:
+
+
+Aplicación Móvil Usuario
+Esta aplicación tendrá las siguientes funcionalidades para los usuarios:
+Recorrido de línea de microbús, esta opción permitirá al usuario buscar y seleccionar una línea de microbús desde una tabla (ver Pantalla 2) y luego pulsar click sobre la línea e indicar si quiere ver el recorrido de ida, de vuelta o ambas. Una vez seleccionada la línea y el recorrido, se debe mostrar en el plano de la ciudad el recorrido de la línea de microbús seleccionada, se debe indicar con una marca de color verde la partida y con una marca de color rojo la llegada, así como también indicar con flecha el sentido del recorrido de la línea (ver Pantalla 3)
+             
+
+
+Que líneas de microbús pasan aquí, permitirá visualizar en plano de la ciudad que líneas de microbuses pasan dentro de un radio dado por donde se encuentra ubicado el usuario o por un punto donde indique el usuario (ver Pantalla 5). Una vez seleccionada la línea y el recorrido (ver Pantalla 6), se debe mostrar en el plano de la ciudad el recorrido de la línea de microbús seleccionada (ver Pantalla 7).
+                    
+
+
+
+Ruta optima, esta opción permitirá al usuario seleccionar dos puntos (A y B), la aplicación debe dar una lista de posibles rutas para viajar del punto A al B, la lista debe estar ordenada de menor a mayor tomando como impedancia el tiempo, la ruta optima es aquella que toma el menor tiempo de ir del punto A al B.  (Deben investigar y aplicar el algoritmo Dijkstra.). 
+La funcionalidad de esta opción está detallada en las figuras abajo mostrada. En la figura 10.1 muestra la pantalla de inicio donde el usuario debe seleccionar dos puntos A y B en el plano (el punto A puede ser el punto donde se encuentra el usuario). La figura 10.2 muestra el icono donde debe pulsar el usuario para que le muestre la lista de rutas posible para ir de A hacia B.  La figura 10.3 muestra al usuario el detalle de la ruta, finalmente en la figura 10.5 se muestra en el mapa la ruta seleccionada.
+                        
+                   Figura 10.1                                                                  Figura 10.2
+                 
+               Figura 10.3                                                                  Figura 10.4
+
+Figura 10.5
+
+
+
+
+

@@ -1,0 +1,15 @@
+__pycache__/
+*.apk
+*.zip
+node_modules/
+.env
+.dart_tool/
+.packages
+build/
+.pub-cache/
+.pub/
+.flutter-plugins
+.flutter-plugins-dependencies
+.idea/
+.vscode/
+*.iml

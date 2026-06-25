@@ -1,0 +1,97 @@
+Sheets in file: ['Lineas', 'Puntos', 'LineaRuta', 'LineasPuntos', 'PuntosTrasbordos']
+
+=== Sheet: Lineas ===
+Shape: (10, 5)
+Columns: ['IdLinea', 'NombreLinea', 'ColorLinea', 'ImagenMicrobus', 'FechaCreacion']
+
+First 10 rows:
+   IdLinea NombreLinea ColorLinea ImagenMicrobus           FechaCreacion
+0        1  L001          #FF0000   img_l045.png 2025-01-19 19:09:42.767
+1        2  L002          #FF0000   img_l045.png 2025-01-19 19:09:42.767
+2        3  L005          #FF0000   img_l045.png 2025-01-19 19:09:42.767
+3        4  L008          #FF0000   img_l045.png 2025-01-19 19:09:42.767
+4        5  L009          #FF0000   img_l045.png 2025-01-19 19:09:42.767
+5        6  L010          #FF0000   img_l045.png 2025-01-19 19:09:42.767
+6        7  L011          #FF0000   img_l045.png 2025-01-19 19:09:42.767
+7        8  L016          #FF0000   img_l045.png 2025-01-19 19:09:42.767
+8        9  L017          #FF0000   img_l045.png 2025-01-19 19:09:42.767
+9       10  L018          #FF0000   img_l045.png 2025-01-19 19:09:42.767
+
+==================================================
+
+=== Sheet: Puntos ===
+Shape: (498, 5)
+Columns: ['IdPunto', 'Latitud', 'Longitud', 'Descripcion', 'Stop']
+
+First 10 rows:
+   IdPunto    Latitud   Longitud Descripcion Stop
+0        1 -17.782792 -63.170335         N-1    N
+1        2 -17.782814 -63.170546         S-2    S
+2        3 -17.782882 -63.171189         S-3    S
+3        4 -17.782936 -63.171782         N-4    N
+4        5 -17.782795 -63.172136         N-5    N
+5        6 -17.782451 -63.172197         N-6    N
+6        7 -17.782271 -63.172228         N-7    N
+7        8 -17.781988 -63.172276         N-8    N
+8        9 -17.780853 -63.172419         N-9    N
+9       10 -17.780434 -63.172478        N-10    N
+
+==================================================
+
+=== Sheet: LineaRuta ===
+Shape: (20, 6)
+Columns: ['IdLineaRuta', 'IdLinea', 'IdRuta', 'Descripcion', 'Distancia', 'Tiempo']
+
+First 10 rows:
+   IdLineaRuta  IdLinea  IdRuta                          Descripcion  Distancia  Tiempo
+0            1        1       1  L001 Ruta Salida                         22.06    1.10
+1            2        1       2  L001 Ruta Retorno                        21.76    1.09
+2            3        2       1  L002 Ruta Salida                         27.10    1.36
+3            4        2       2  L002 Ruta Retorno                        20.76    1.04
+4            5        3       1  L005 Ruta Salida                         20.41    1.02
+5            6        3       2  L005 Ruta Retorno                        20.75    1.04
+6            7        4       1  L008 Ruta Salida                         27.74    1.39
+7            8        4       2  L008 Ruta Retorno                        28.23    1.41
+8            9        5       1  L009 Ruta Salida                         26.02    1.30
+9           10        5       2  L009 Ruta Retorno                        16.56    0.83
+
+==================================================
+
+=== Sheet: LineasPuntos ===
+Shape: (1361, 7)
+Columns: ['IdLineaPunto', 'IdLineaRuta', 'IdPunto', 'IdPuntoDest', 'Orden', 'Distancia', 'Tiempo']
+
+First 10 rows:
+   IdLineaPunto  IdLineaRuta  IdPunto  IdPuntoDest  Orden  Distancia  Tiempo
+0             1            1        1            2      1          0       0
+1             2            1        2            3      2          0       0
+2             3            1        3            4      3          0       0
+3             4            1        4            5      4          0       0
+4             5            1        5            6      5          0       0
+5             6            1        6            7      6          0       0
+6             7            1        7            8      7          0       0
+7             8            1        8            9      8          0       0
+8             9            1        9           10      9          0       0
+9            10            1       10           11     10          0       0
+
+==================================================
+
+=== Sheet: PuntosTrasbordos ===
+Shape: (534, 5)
+Columns: ['IdTrasbordo', 'IdPunto', 'IdLineaOrigen', 'IdLineaDestino', 'PenalizacionMin']
+
+First 10 rows:
+   IdTrasbordo  IdPunto  IdLineaOrigen  IdLineaDestino  PenalizacionMin
+0            0        2              2               1                5
+1            1        2              3               1                5
+2            2        2              4               1                5
+3            3        2              1               2                5
+4            4        2              3               2                5
+5            5        2              4               2                5
+6            6        2              1               3                5
+7            7        2              2               3                5
+8            8        2              4               3                5
+9            9        2              1               4                5
+
+==================================================
+

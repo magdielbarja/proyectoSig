@@ -1,0 +1,22 @@
+Datos requeridos
+Lista de Líneas de Microbuses
+Puntos Geográficos con los recorridos de las Líneas de Microbuses tomados en campos.
+Puntos Geográficos de las Paradas de microbuses en la ciudad.
+
+Construcción de la Red de Transporte
+
+Se recolecta la información de las líneas mediante una App que hace Tracking y toma los putos de todo el recorrido. Los Puntos deben ser tomados en formato decimal con la referencia espacial GWS84. Además, los puntos deben tener una Secuencia partiendo desde el punto de partida se enumeran con 10,20, 30,…,n para definir la secuencia de la ruta (se numeran cada 10).
+Los puntos son cargados al ArcGIS y ajustados a las calles de la ciudad. Se deben dibujar (líneas) de todos los recorridos de las Líneas de Microbuses, tanto de ida como de retorno, respetando la Secuencia como fueron recolectados los puntos. Las líneas deben ser ajustadas sobre las calles de la ciudad, si las calles permiten circulación doble, entonces se dibujan líneas sobre ambos lados de las calles. Las Líneas deben ser Re proyectadas a la Proyección Espacial UTM (ejemplo SCZ es UTM 20S). 
+Las Paradas das de Microbús deben ser integradas a los puntos de los recorridos de las líneas y deben ser numeradas (5,15,25, 35,…,n). Si la ubicación geográfica de una Parada coincide con un punto del recorrido se debe eliminar el punto y se queda el punto de Parada.
+Se genera una tablas con todos los recorrido y un campo denominado stop (S,N) define si el punto es una Parada o un Punto de recorrido. Finalmente a esta última tabla se adiciona un campo Orden, para cada recorrido se debe renumerar del 1..n
+
+
+Construcción de la Red de Transporte para el proyecto
+
+Slip Line a Vertice, obtiene líneas seccionada por sus vértices, se crea un campo Orden para mantener el orden. Entrada Lineas.shp, sale LineasSplit.shp
+Split Line at Point, obtiene líneas seccionada por putos sobre las lineas, en este caso se secciona por los Stop.shp generando un archivo LineasSplitStop2.shp.
+Feacture Vertice to Point, genera un archivo de puntos denominado Points2.shp a partir del archivo LineasSplitStop2.shp. A Points2.shp se adiciona un campo Latitud, Longitud y LonLat  
+Join, entre Points2.shp y Stop.shp, se adiciona el campo Stop a Point2.shp y se actualiza con Stop=Stop.Stop luego se hace la selección inversa y se actualiza Stop=”N”
+Exportamos a una nueva capa denominada PointsAll.ahp desde Points2.shp y con la función Delete Identical se eliminan los duplicados del campo LonLat.
+A Points2.shp se adiciona el campo IdPunto y se hace un JOIN con PointsAll.shp mediante el campo LonLat, se crea el campo IdPunto en Points2.shp y se actualiza con PointAll.IdPunto 
+ 
