@@ -28,6 +28,43 @@ app.get('/api/lines', async (req, res) => {
   }
 });
 
+// 3. GET /api/lines/near - Find lines passing near a coordinate
+app.get('/api/lines/near', async (req, res) => {
+  const lat = parseFloat(req.query.lat);
+  const lon = parseFloat(req.query.lon);
+  const radiusMeters = parseFloat(req.query.radius) || 500.0;
+  const radiusKm = radiusMeters / 1000.0;
+
+  if (isNaN(lat) || isNaN(lon)) {
+    return res.status(400).json({ error: 'lat and lon query parameters are required and must be numbers' });
+  }
+
+  try {
+    // Query distinct lines passing through points within the specified radius
+    // We calculate the Haversine distance directly in SQL to make it fast and avoid pg array parsing errors.
+    const query = `
+      SELECT DISTINCT l.id_linea, l.nombre_linea, l.color_linea, l.imagen_microbus
+      FROM lineas_puntos lp
+      JOIN linea_ruta lr ON lp.id_linea_ruta = lr.id_linea_ruta
+      JOIN lineas l ON lr.id_linea = l.id_linea
+      JOIN puntos p ON (lp.id_punto = p.id_point OR lp.id_punto_dest = p.id_point)
+      WHERE (
+        6371.0 * 2.0 * ASIN(LEAST(1.0, SQRT(GREATEST(0.0, 
+          POWER(SIN((p.latitud - $1) * pi() / 360.0), 2) +
+          COS($1 * pi() / 180.0) * COS(p.latitud * pi() / 180.0) *
+          POWER(SIN((p.longitud - $2) * pi() / 360.0), 2)
+        )))) <= $3
+      )
+      ORDER BY l.nombre_linea ASC
+    `;
+    const linesRes = await db.query(query, [lat, lon, radiusKm]);
+    res.json(linesRes.rows);
+  } catch (err) {
+    console.error('Error finding near lines:', err);
+    res.status(500).json({ error: 'Database error finding near lines' });
+  }
+});
+
 // 2. GET /api/lines/:id - Get full route details for a specific line (ida y retorno)
 app.get('/api/lines/:id', async (req, res) => {
   const lineId = parseInt(req.params.id);
@@ -99,43 +136,6 @@ app.get('/api/lines/:id', async (req, res) => {
   } catch (err) {
     console.error(`Error fetching line ${lineId}:`, err);
     res.status(500).json({ error: 'Database error fetching line details' });
-  }
-});
-
-// 3. GET /api/lines/near - Find lines passing near a coordinate
-app.get('/api/lines/near', async (req, res) => {
-  const lat = parseFloat(req.query.lat);
-  const lon = parseFloat(req.query.lon);
-  const radiusMeters = parseFloat(req.query.radius) || 500.0;
-  const radiusKm = radiusMeters / 1000.0;
-
-  if (isNaN(lat) || isNaN(lon)) {
-    return res.status(400).json({ error: 'lat and lon query parameters are required and must be numbers' });
-  }
-
-  try {
-    // Query distinct lines passing through points within the specified radius
-    // We calculate the Haversine distance directly in SQL to make it fast and avoid pg array parsing errors.
-    const query = `
-      SELECT DISTINCT l.id_linea, l.nombre_linea, l.color_linea, l.imagen_microbus
-      FROM lineas_puntos lp
-      JOIN linea_ruta lr ON lp.id_linea_ruta = lr.id_linea_ruta
-      JOIN lineas l ON lr.id_linea = l.id_linea
-      JOIN puntos p ON (lp.id_punto = p.id_point OR lp.id_punto_dest = p.id_point)
-      WHERE (
-        6371.0 * 2.0 * ASIN(LEAST(1.0, SQRT(GREATEST(0.0, 
-          POWER(SIN((p.latitud - $1) * pi() / 360.0), 2) +
-          COS($1 * pi() / 180.0) * COS(p.latitud * pi() / 180.0) *
-          POWER(SIN((p.longitud - $2) * pi() / 360.0), 2)
-        )))) <= $3
-      )
-      ORDER BY l.nombre_linea ASC
-    `;
-    const linesRes = await db.query(query, [lat, lon, radiusKm]);
-    res.json(linesRes.rows);
-  } catch (err) {
-    console.error('Error finding near lines:', err);
-    res.status(500).json({ error: 'Database error finding near lines' });
   }
 });
 
