@@ -191,9 +191,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   final osrmGeom = await ApiService.getWalkingRouteGeometry(fromLat, fromLon, toLat, toLon);
                   if (osrmGeom != null) {
                     final newPoints = [];
+                    newPoints.add({'lat': fromLat, 'lon': fromLon});
                     for (var coords in osrmGeom) {
                       newPoints.add({'lat': coords[1], 'lon': coords[0]}); // OSRM is [lon, lat]
                     }
+                    newPoints.add({'lat': toLat, 'lon': toLon});
                     leg['points'] = newPoints;
                   }
                 }

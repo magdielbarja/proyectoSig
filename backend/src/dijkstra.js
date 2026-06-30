@@ -834,7 +834,7 @@ async function findAlternativeRoutes(startLat, startLon, endLat, endLon, mode = 
           currentLeg.distance += edge.dist;
           currentLeg.time += edge.time * 60;
           currentLeg.stopsCount += 1;
-          currentLeg.points.push({ lat: toPoint.latitud, lon: toPoint.longitud });
+          currentLeg.points.push({ lat: toPoint.latitud, lon: toPoint.longitud, stop: toPoint.stop });
           currentLeg.description = `Viaja en Línea ${lineInfo.nombre_linea.trim()} (${routeInfo.descripcion.trim()}) durante ${currentLeg.stopsCount} paradas`;
         } else {
           const fromNode = rawPath[rawPath.indexOf(step) - 1].node;
@@ -852,8 +852,8 @@ async function findAlternativeRoutes(startLat, startLon, endLat, endLon, mode = 
             time: edge.time * 60,
             stopsCount: 1,
             points: [
-              { lat: fromPoint.latitud, lon: fromPoint.longitud },
-              { lat: toPoint.latitud, lon: toPoint.longitud }
+              { lat: fromPoint.latitud, lon: fromPoint.longitud, stop: fromPoint.stop },
+              { lat: toPoint.latitud, lon: toPoint.longitud, stop: toPoint.stop }
             ]
           };
           legs.push(currentLeg);
@@ -916,14 +916,38 @@ async function findAlternativeRoutes(startLat, startLon, endLat, endLon, mode = 
     }
   }
 
-  // Sort: Direct routes first, then by total time
-  uniqueRoutes.sort((a, b) => {
+  // Sort primarily by time
+  uniqueRoutes.sort((a, b) => a.totalTimeMin - b.totalTimeMin);
+
+  // Ensure we include at least one transfer option if available
+  const result = [];
+  let addedTransfer = false;
+  
+  for (const r of uniqueRoutes) {
+    // If we have 2 routes and neither is a transfer, try to force a transfer route
+    if (result.length === 2 && !addedTransfer) {
+       const bestTransfer = uniqueRoutes.find(rt => !rt.isDirect);
+       if (bestTransfer && !result.includes(bestTransfer)) {
+          result.push(bestTransfer);
+          addedTransfer = true;
+          continue;
+       }
+    }
+    if (!result.includes(r)) {
+       result.push(r);
+       if (!r.isDirect) addedTransfer = true;
+    }
+    if (result.length >= 3) break;
+  }
+  
+  // Final presentation sort: Direct first, then time
+  result.sort((a, b) => {
     if (a.isDirect && !b.isDirect) return -1;
     if (!a.isDirect && b.isDirect) return 1;
     return a.totalTimeMin - b.totalTimeMin;
   });
 
-  return uniqueRoutes.slice(0, 3); // Return up to top 3 alternatives
+  return result;
 }
 
 module.exports = {
