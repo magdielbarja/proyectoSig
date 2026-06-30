@@ -584,21 +584,26 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           _addDirectionalArrows(polyPoints, markers, color);
 
           // Add bus stop dots along the optimal path
-          for (var p in polyPoints) {
-            markers.add(
-              Marker(
-                point: p,
-                width: 14.0,
-                height: 14.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: color, width: 2.0),
+          for (var p in pointsList) {
+            if (p['stop'] == 'S') {
+              markers.add(
+                Marker(
+                  point: LatLng(p['lat'], p['lon']),
+                  width: 20.0,
+                  height: 20.0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: color, width: 2.5),
+                    ),
+                    child: const Center(
+                      child: Icon(Icons.directions_bus, size: 10.0, color: Colors.black87),
+                    ),
                   ),
                 ),
-              ),
-            );
+              );
+            }
           }
         }
 
