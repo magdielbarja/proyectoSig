@@ -123,11 +123,11 @@ app.get('/api/lines/near', async (req, res) => {
       JOIN lineas l ON lr.id_linea = l.id_linea
       JOIN puntos p ON (lp.id_punto = p.id_point OR lp.id_punto_dest = p.id_point)
       WHERE (
-        6371.0 * 2.0 * ASIN(SQRT(
+        6371.0 * 2.0 * ASIN(LEAST(1.0, SQRT(GREATEST(0.0, 
           POWER(SIN((p.latitud - $1) * pi() / 360.0), 2) +
           COS($1 * pi() / 180.0) * COS(p.latitud * pi() / 180.0) *
           POWER(SIN((p.longitud - $2) * pi() / 360.0), 2)
-        )) <= $3
+        )))) <= $3
       )
       ORDER BY l.nombre_linea ASC
     `;

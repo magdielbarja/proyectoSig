@@ -1517,10 +1517,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         ),
         const SizedBox(height: 12),
         // Routing Configurations (Smart vs Official, Time vs Distance)
-        Row(
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 8.0,
+          runSpacing: 4.0,
           children: [
             const Text('Criterio: ', style: TextStyle(color: Colors.white70)),
-            const SizedBox(width: 8),
             ChoiceChip(
               label: const Text('Menor Tiempo'),
               selected: _routingMetric == 'time',
@@ -1531,7 +1533,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               backgroundColor: Colors.white10,
               labelStyle: const TextStyle(color: Colors.white),
             ),
-            const SizedBox(width: 8),
             ChoiceChip(
               label: const Text('Menor Distancia'),
               selected: _routingMetric == 'distance',
@@ -1545,10 +1546,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           ],
         ),
         const SizedBox(height: 8),
-        Row(
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 8.0,
+          runSpacing: 4.0,
           children: [
             const Text('Transbordos: ', style: TextStyle(color: Colors.white70)),
-            const SizedBox(width: 8),
             ChoiceChip(
               label: const Text('Inteligente (Intersecciones)'),
               selected: _routingMode == 'smart',
@@ -1559,7 +1562,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               backgroundColor: Colors.white10,
               labelStyle: const TextStyle(color: Colors.white),
             ),
-            const SizedBox(width: 8),
             ChoiceChip(
               label: const Text('Oficial (Tabla)'),
               selected: _routingMode == 'official',
